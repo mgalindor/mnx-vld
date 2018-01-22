@@ -6,12 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD,ElementType.PARAMETER})
+@Target({ElementType.METHOD})
 public @interface Rules {
     
-    Rule[] value();
+    Rule[] value() default {} ;
 
-    Class<?> rules();
-    
-    String mehtodRules();
+    ExternalRule[] externalRules() default {};
 }

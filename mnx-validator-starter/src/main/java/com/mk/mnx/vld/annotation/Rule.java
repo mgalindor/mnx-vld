@@ -9,7 +9,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD,ElementType.PARAMETER})
 public @interface Rule {
 
-    String parameter() default "";
+    String parameter() ;
+    
+    String path() default "" ;
     
     boolean required() default false;
     
