@@ -12,55 +12,58 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.mk.mnx.vld.annotation.Rule;
-import com.mk.mnx.vld.enu.DefaultErrorType;
+import com.mk.mnx.vld.exception.MonoxValidationConstraintException;
 import com.mk.mnx.vld.exception.MonoxValidationException;
-import com.mk.mnx.vld.exception.ValidationConstraintError;
+import com.mk.mnx.vld.model.Constraint;
+import com.mk.mnx.vld.model.DefaultErrorType;
+import com.mk.mnx.vld.model.ValidationConstraintError;
 
 @Component
 public class MonoxValidator {
 
-	public void valid(List<Rule> rules, Map<String, Object> params)
-			throws MonoxValidationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	public void valid(List<Constraint> constraints, Map<String, Object> params) throws MonoxValidationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, MonoxValidationConstraintException  {
 		List<ValidationConstraintError> errors = new ArrayList<ValidationConstraintError>();
-		for (Rule rule : rules) {
-			if (rule.parameter() == null) {
+		for (Constraint constraint : constraints) {
+			if (constraint.getParameter() == null) {
 				throw new MonoxValidationException("The attribute parameter over Rule is required");
 			}
-			Object o = params.get(rule.parameter());
-			if (o == null) {
-				throw new MonoxValidationException(String.format("The parameter %s doesn't exist", rule.parameter()));
+			
+			if (!params.containsKey(constraint.getParameter())) {
+				throw new MonoxValidationException(String.format("The parameter [%s] doesn't exist", constraint.getParameter()));
 			}
-			String field = rule.path() == null ? String.valueOf(o) : BeanUtils.getProperty(o, rule.path());
+			Object o = params.get(constraint.getParameter());
+			
+			String os = o == null ? StringUtils.EMPTY : String.valueOf(o);  
+			String field = StringUtils.isEmpty( constraint.getPath() )  ? os : BeanUtils.getProperty(o, constraint.getPath());
 
-			field = rule.trim() ? field.trim() : field;
+			field = constraint.isTrim() ? field.trim() : field;
 
-			if (field == null && rule.required()) {
-				errors.add(new ValidationConstraintError( DefaultErrorType.REQUIRED , rule.path()  , rule.path() ));
-			} else if (field != null) {
-				if (rule.minlength() != -1 && field.length() < rule.minlength()) {
-					errors.add(new ValidationConstraintError( DefaultErrorType.WRONG_MIN_LENGTH , rule.path()  , rule.path(), rule.minlength()));
+			if ( StringUtils.isEmpty(field)  && constraint.isRequired()) {
+				errors.add(new ValidationConstraintError( DefaultErrorType.REQUIRED , constraint.getParameter()  , constraint.getPath() ));
+			} else if ( ! StringUtils.isEmpty(field)  ) {
+				if (constraint.getMinlength() != -1 && field.length() < constraint.getMinlength()) {
+					errors.add(new ValidationConstraintError( DefaultErrorType.WRONG_MIN_LENGTH , constraint.getParameter()  , constraint.getPath(), constraint.getMinlength()));
 				}
-				if (rule.maxlength() != -1 && field.length() > rule.maxlength()) {
-					errors.add(new ValidationConstraintError( DefaultErrorType.WRONG_MIN_LENGTH , rule.path()  , rule.path(), rule.maxlength()));
+				if (constraint.getMaxlength() != -1 && field.length() > constraint.getMaxlength()) {
+					errors.add(new ValidationConstraintError( DefaultErrorType.WRONG_MIN_LENGTH , constraint.getParameter()  , constraint.getPath(), constraint.getMaxlength()));
 				}
-				if (rule.minvalue() != -1 && StringUtils.isNumeric(field) && new BigDecimal(field).compareTo(new BigDecimal(rule.minvalue())) == -1 ) {
-					errors.add(new ValidationConstraintError( DefaultErrorType.WRONG_MIN_VALUE , rule.path()  , rule.path(), rule.minvalue()));
+				if (constraint.getMinvalue() != -1 && StringUtils.isNumeric(field) && new BigDecimal(field).compareTo(new BigDecimal(constraint.getMinvalue())) == -1 ) {
+					errors.add(new ValidationConstraintError( DefaultErrorType.WRONG_MIN_VALUE , constraint.getParameter()  , constraint.getPath(), constraint.getMinvalue()));
 				}
-				if (rule.maxvalue() != -1 && StringUtils.isNumeric(field) && new BigDecimal(field).compareTo(new BigDecimal(rule.maxvalue())) == 1 ) {
-					errors.add(new ValidationConstraintError( DefaultErrorType.WRONG_MAX_VALUE , rule.path()  , rule.path(), rule.maxvalue()));
+				if (constraint.getMaxvalue()!= -1 && StringUtils.isNumeric(field) && new BigDecimal(field).compareTo(new BigDecimal(constraint.getMaxvalue())) == 1 ) {
+					errors.add(new ValidationConstraintError( DefaultErrorType.WRONG_MAX_VALUE , constraint.getParameter()  , constraint.getPath(), constraint.getMaxvalue()));
 				}
-				if (rule.mask() != null) {
-					Pattern pattern = Pattern.compile(rule.mask());
+				if ( !StringUtils.isEmpty(constraint.getMask()) ) {
+					Pattern pattern = Pattern.compile(constraint.getMask());
 					Matcher matcher = pattern.matcher(field);
 					if(!matcher.matches()) {
-						errors.add(new ValidationConstraintError( DefaultErrorType.WRONG_MASK , rule.path()  , rule.path(), rule.mask()));
+						errors.add(new ValidationConstraintError( DefaultErrorType.WRONG_MASK , constraint.getParameter()  , constraint.getPath(), constraint.getMask()));
 					}
 				}
 			}
 		}
 		if(!errors.isEmpty()) {
-			throw new MonoxValidationException("There are some errors", errors);
+			throw new MonoxValidationConstraintException("There are some errors", errors);
 		}
 	}
 

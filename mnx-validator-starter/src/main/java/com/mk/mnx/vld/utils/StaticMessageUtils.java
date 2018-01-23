@@ -9,8 +9,8 @@ public class StaticMessageUtils {
 	
 	private static MessageSource messageSource;
 	
-	public static void setMessageSource(MessageSource messageSource) {
-		StaticMessageUtils.messageSource = messageSource;
+	public StaticMessageUtils(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 	
 	public static String getMessage(String key , Object ... args) {

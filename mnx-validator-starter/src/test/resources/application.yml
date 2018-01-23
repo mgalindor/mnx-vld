@@ -1,0 +1,3 @@
+monox:
+  validation:
+    messages:classpath:error

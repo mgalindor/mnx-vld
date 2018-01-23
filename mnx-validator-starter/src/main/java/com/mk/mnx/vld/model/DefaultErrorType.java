@@ -1,4 +1,6 @@
-package com.mk.mnx.vld.enu;
+package com.mk.mnx.vld.model;
+
+import com.mk.mnx.vld.enu.ErrorType;
 
 public enum DefaultErrorType implements ErrorType {
 	

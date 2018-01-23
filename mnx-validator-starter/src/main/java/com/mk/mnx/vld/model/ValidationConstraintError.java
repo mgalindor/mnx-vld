@@ -1,4 +1,4 @@
-package com.mk.mnx.vld.exception;
+package com.mk.mnx.vld.model;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
