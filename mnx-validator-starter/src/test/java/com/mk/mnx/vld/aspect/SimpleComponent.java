@@ -2,6 +2,7 @@ package com.mk.mnx.vld.aspect;
 
 import org.springframework.stereotype.Component;
 
+import com.mk.mnx.vld.annotation.ExternalRule;
 import com.mk.mnx.vld.annotation.ParamName;
 import com.mk.mnx.vld.annotation.Rule;
 import com.mk.mnx.vld.annotation.Rules;
@@ -42,6 +43,25 @@ public class SimpleComponent {
     @Validate
     public String basicRuleOverParamWithAnnotation(@Rule(parameter="otherName",required=true )  @ParamName("otherName") String name) {
         return "Hello "+name;
+    }
+    
+    @Validate
+    @Rules(externalRules = { @ExternalRule(classRule=SimpleComponent.class, mehtodRule="rules" )    }  )
+    public String basicExternalRule(String name) {
+        return "Hello "+name;
+    }
+    
+    @Rules(@Rule(parameter="name",required=true )  ) 
+    private void rules() {}
+    
+    
+    @Validate
+    @Rules( {@Rule(parameter="fly",path="name" ,required=true ),
+    		@Rule(parameter="fly",path="pilot.ranking" ,required=true ),
+    		@Rule(parameter="fly",path="pilot.detail.age" ,required=true )
+    }) 
+    public void basicRuleOverModel( Fly fly) {
+    	
     }
 
 }

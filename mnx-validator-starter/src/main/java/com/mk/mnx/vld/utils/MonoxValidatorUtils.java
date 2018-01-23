@@ -35,6 +35,20 @@ public class MonoxValidatorUtils {
     	    	}
         	}
     	}
+    	
+    	if( rules != null && rules.externalRules().length != 0) {
+    		
+    		for(ExternalRule externalRule : rules.externalRules()) {
+    	    	if(externalRule.classRule() != null && externalRule.mehtodRule() != null) {
+    	    		Method m = externalRule.classRule().getDeclaredMethod(externalRule.mehtodRule());
+    	    		lRule.addAll(getRulesInMethod(m));
+    	    	}
+    	    	else {
+    	    		throw new MonoxValidationException("The attributes over External Rule Annotation classRule and mehtodRule are required");
+    	    	}
+        	}
+    	}
+    	
     	Parameter[] parameters = method.getParameters();
     	for(Parameter param : parameters)
     	{

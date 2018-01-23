@@ -94,7 +94,7 @@ public class MonoxValidationAspectTest {
 			Assert.assertFalse(mvce.getErrors().isEmpty());
 			Assert.assertTrue(mvce.getErrors().size() == 1);
 			Assert.assertTrue(mvce.getErrors().get(0).getType().getType().equals(DefaultErrorType.REQUIRED.getType()));
-			Assert.assertEquals("otherName", mvce.getErrors().get(0).getParameter());
+			Assert.assertEquals("name", mvce.getErrors().get(0).getParameter());
 		}
 	}
 
@@ -116,6 +116,28 @@ public class MonoxValidationAspectTest {
 			Assert.assertTrue(mvce.getErrors().size() == 1);
 			Assert.assertTrue(mvce.getErrors().get(0).getType().getType().equals(DefaultErrorType.REQUIRED.getType()));
 			Assert.assertEquals("otherName", mvce.getErrors().get(0).getParameter());
+		}
+	}
+	
+	
+	@Test
+	public void basicExternalRule() {
+		simpleComponent.basicExternalRule("Mike");
+	}
+
+	@Test
+	public void basicExternalRuleException() {
+		try {
+			simpleComponent.basicExternalRule(null);
+			Assert.fail();
+		} catch (UndeclaredThrowableException e) {
+			Assert.assertTrue(e.getUndeclaredThrowable() instanceof MonoxValidationConstraintException);
+			MonoxValidationConstraintException mvce = (MonoxValidationConstraintException) e.getUndeclaredThrowable();
+			Assert.assertNotNull(mvce.getErrors());
+			Assert.assertFalse(mvce.getErrors().isEmpty());
+			Assert.assertTrue(mvce.getErrors().size() == 1);
+			Assert.assertTrue(mvce.getErrors().get(0).getType().getType().equals(DefaultErrorType.REQUIRED.getType()));
+			Assert.assertEquals("name", mvce.getErrors().get(0).getParameter());
 		}
 	}
 
