@@ -1,4 +1,4 @@
-package com.mk.mnx.vld.aspect;
+package com.mk.mnx.vld.aspect.service.impl;
 
 import org.springframework.stereotype.Component;
 
@@ -7,9 +7,10 @@ import com.mk.mnx.vld.annotation.ParamName;
 import com.mk.mnx.vld.annotation.Rule;
 import com.mk.mnx.vld.annotation.Rules;
 import com.mk.mnx.vld.annotation.Validate;
+import com.mk.mnx.vld.aspect.model.Fly;
 
 @Component
-public class SimpleComponent {
+public class SimpleComponent{
     
     @Validate
     public String nonRules( String name) {
@@ -53,7 +54,6 @@ public class SimpleComponent {
     
     @Rules(@Rule(parameter="name",required=true )  ) 
     private void rules() {}
-    
     
     @Validate
     @Rules( {@Rule(parameter="fly",path="name" ,required=true ),

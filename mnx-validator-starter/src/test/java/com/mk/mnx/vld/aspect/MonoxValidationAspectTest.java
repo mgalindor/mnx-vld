@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.mk.mnx.vld.ValidationContextConfigurationTest;
+import com.mk.mnx.vld.aspect.service.ISimpleService;
+import com.mk.mnx.vld.aspect.service.impl.SimpleComponent;
 import com.mk.mnx.vld.exception.MonoxValidationConstraintException;
 import com.mk.mnx.vld.model.DefaultErrorType;
 
@@ -19,6 +21,9 @@ public class MonoxValidationAspectTest {
 
 	@Autowired
 	private SimpleComponent simpleComponent;
+	
+	@Autowired
+	private ISimpleService simpleService;
 
 	@Test
 	public void contextValidation() {
@@ -129,6 +134,27 @@ public class MonoxValidationAspectTest {
 	public void basicExternalRuleException() {
 		try {
 			simpleComponent.basicExternalRule(null);
+			Assert.fail();
+		} catch (UndeclaredThrowableException e) {
+			Assert.assertTrue(e.getUndeclaredThrowable() instanceof MonoxValidationConstraintException);
+			MonoxValidationConstraintException mvce = (MonoxValidationConstraintException) e.getUndeclaredThrowable();
+			Assert.assertNotNull(mvce.getErrors());
+			Assert.assertFalse(mvce.getErrors().isEmpty());
+			Assert.assertTrue(mvce.getErrors().size() == 1);
+			Assert.assertTrue(mvce.getErrors().get(0).getType().getType().equals(DefaultErrorType.REQUIRED.getType()));
+			Assert.assertEquals("name", mvce.getErrors().get(0).getParameter());
+		}
+	}
+	
+	@Test
+	public void interfaceBasicRule() {
+		simpleService.interfaceBasicRule("Mike");
+	}
+
+	@Test
+	public void interfaceBasicRuleException() {
+		try {
+			simpleService.interfaceBasicRule(null);
 			Assert.fail();
 		} catch (UndeclaredThrowableException e) {
 			Assert.assertTrue(e.getUndeclaredThrowable() instanceof MonoxValidationConstraintException);

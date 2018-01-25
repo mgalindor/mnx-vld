@@ -1,4 +1,4 @@
-package com.mk.mnx.vld.aspect;
+package com.mk.mnx.vld.aspect.model;
 
 public class Fly {
 

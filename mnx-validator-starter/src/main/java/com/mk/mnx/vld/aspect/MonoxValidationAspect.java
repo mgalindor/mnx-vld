@@ -25,14 +25,17 @@ public class MonoxValidationAspect {
 
 	@Autowired
 	private MonoxValidator monoxValidator;
+	
+	@Autowired
+	private MonoxValidatorUtils monoxValidatorUtils;
 
 	@Around("@annotation(com.mk.mnx.vld.annotation.Validate)")
 	public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
 		MethodSignature methodSignature = (MethodSignature) joinPoint.getStaticPart().getSignature();
 		Method method = methodSignature.getMethod();
 
-		List<Constraint> constraints = MonoxValidatorUtils.getRulesInMethod(method);
-		Map<String, Object> params = MonoxValidatorUtils.getParameterNameValueMap(method, joinPoint.getArgs());
+		List<Constraint> constraints = monoxValidatorUtils.getRulesInMethod(method);
+		Map<String, Object> params = monoxValidatorUtils.getParameterNameValueMap(method, joinPoint.getArgs());
 
 		try {
 			monoxValidator.valid(constraints, params);

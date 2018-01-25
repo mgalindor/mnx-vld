@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.mk.mnx.vld.annotation.ExternalRule;
 import com.mk.mnx.vld.annotation.ParamName;
 import com.mk.mnx.vld.annotation.Rule;
@@ -16,10 +18,10 @@ import com.mk.mnx.vld.annotation.Rules;
 import com.mk.mnx.vld.exception.MonoxValidationException;
 import com.mk.mnx.vld.model.Constraint;
 
+@Component
 public class MonoxValidatorUtils {
-
 	
-	public static List<Constraint> getRulesInMethod(Method method) throws NoSuchMethodException, SecurityException, MonoxValidationException {
+	public List<Constraint> getRulesInMethod(Method method) throws NoSuchMethodException, SecurityException, MonoxValidationException {
     	List<Constraint> lRule = new ArrayList<Constraint>();
     	Rules rules  = method.getAnnotation(Rules.class);
     	if( rules != null && rules.value().length != 0) {
@@ -65,7 +67,7 @@ public class MonoxValidatorUtils {
     	return lRule;
     }
     
-	public static Map<String, Object> getParameterNameValueMap(Method method, Object[] args) {
+	public Map<String, Object> getParameterNameValueMap(Method method, Object[] args) {
         Map<String, Object> annotatedParameters = new HashMap<>();
         Parameter[] parameters = method.getParameters();
 
