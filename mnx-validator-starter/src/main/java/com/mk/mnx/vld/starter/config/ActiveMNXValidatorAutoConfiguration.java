@@ -13,7 +13,9 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.core.Ordered;
 
 import com.mk.mnx.vld.constant.MonoxValidatorConstants;
+import com.mk.mnx.vld.utils.MonoxValidatorUtils;
 import com.mk.mnx.vld.utils.StaticMessageUtils;
+import com.mk.mnx.vld.validator.MonoxValidator;
 
 @Configuration
 @ComponentScan(basePackages = {MonoxValidatorConstants.BASE_COMPONENT_SCAN})
@@ -46,10 +48,21 @@ public class ActiveMNXValidatorAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(StaticMessageUtils.class)
 	@ConditionalOnBean(name="monoxValidatorMessageSource")
-	public StaticMessageUtils StaticMessageUtils(@Qualifier("monoxValidatorMessageSource") MessageSource messageSource) {
+	public StaticMessageUtils messageUtils(@Qualifier("monoxValidatorMessageSource") MessageSource messageSource) {
 		StaticMessageUtils staticMessageUtils = new StaticMessageUtils(messageSource);
 		return staticMessageUtils;
 	}
 	
+	@Bean
+	@ConditionalOnMissingBean(MonoxValidatorUtils.class)
+	public MonoxValidatorUtils monoxValidatorUtils() {
+		return new MonoxValidatorUtils();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(MonoxValidator.class)
+	public MonoxValidator monoxValidator() {
+		return new MonoxValidator();
+	}
 
 }
