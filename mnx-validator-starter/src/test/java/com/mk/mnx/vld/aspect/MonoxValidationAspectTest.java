@@ -10,6 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.mk.mnx.vld.ValidationContextConfigurationTest;
+import com.mk.mnx.vld.aspect.model.Detail;
+import com.mk.mnx.vld.aspect.model.Fly;
+import com.mk.mnx.vld.aspect.model.Pilot;
 import com.mk.mnx.vld.aspect.service.ISimpleService;
 import com.mk.mnx.vld.aspect.service.impl.SimpleComponent;
 import com.mk.mnx.vld.exception.MonoxValidationConstraintException;
@@ -155,6 +158,30 @@ public class MonoxValidationAspectTest {
 	public void interfaceBasicRuleException() {
 		try {
 			simpleService.interfaceBasicRule(null);
+			Assert.fail();
+		} catch (UndeclaredThrowableException e) {
+			Assert.assertTrue(e.getUndeclaredThrowable() instanceof MonoxValidationConstraintException);
+			MonoxValidationConstraintException mvce = (MonoxValidationConstraintException) e.getUndeclaredThrowable();
+			Assert.assertNotNull(mvce.getErrors());
+			Assert.assertFalse(mvce.getErrors().isEmpty());
+			Assert.assertTrue(mvce.getErrors().size() == 1);
+			Assert.assertTrue(mvce.getErrors().get(0).getType().getType().equals(DefaultErrorType.REQUIRED.getType()));
+			Assert.assertEquals("name", mvce.getErrors().get(0).getParameter());
+		}
+	}
+	
+	@Test
+	public void basicRuleOverModel() {
+		Fly fly = new Fly();
+		fly.setPilot(new Pilot());
+		fly.getPilot().setDetail(new Detail());
+		simpleComponent.basicRuleOverModel(fly);
+	}
+
+	@Test
+	public void basicRuleOverModelException() {
+		try {
+			simpleComponent.basicRuleOverModel(null);
 			Assert.fail();
 		} catch (UndeclaredThrowableException e) {
 			Assert.assertTrue(e.getUndeclaredThrowable() instanceof MonoxValidationConstraintException);
