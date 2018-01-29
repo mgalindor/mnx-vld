@@ -20,7 +20,7 @@ import com.mk.mnx.vld.model.DefaultErrorType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ValidationContextConfigurationTest.class)
-public class MonoxValidationAspectTest {
+public class MonoxValidationAspectSimpleParameterTest {
 
 	@Autowired
 	private SimpleComponent simpleComponent;
@@ -170,32 +170,4 @@ public class MonoxValidationAspectTest {
 		}
 	}
 	
-	@Test
-	public void basicRuleOverModel() {
-		Fly fly = new Fly();
-		fly.setPilot(new Pilot());
-		fly.getPilot().setDetail(new Detail());
-		
-		fly.setName("Mike");
-		fly.getPilot().setRanking("Expert");
-		fly.getPilot().getDetail().setAge(23d);
-		simpleComponent.basicRuleOverModel(fly);
-	}
-
-	@Test
-	public void basicRuleOverModelException() {
-		try {
-			simpleComponent.basicRuleOverModel(null);
-			Assert.fail();
-		} catch (UndeclaredThrowableException e) {
-			Assert.assertTrue(e.getUndeclaredThrowable() instanceof MonoxValidationConstraintException);
-			MonoxValidationConstraintException mvce = (MonoxValidationConstraintException) e.getUndeclaredThrowable();
-			Assert.assertNotNull(mvce.getErrors());
-			Assert.assertFalse(mvce.getErrors().isEmpty());
-			Assert.assertEquals(new Integer(3), new Integer (mvce.getErrors().size()));
-			Assert.assertTrue(mvce.getErrors().get(0).getType().getType().equals(DefaultErrorType.REQUIRED.getType()));
-			Assert.assertEquals("fly", mvce.getErrors().get(0).getParameter());
-		}
-	}
-
 }
