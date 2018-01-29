@@ -1,24 +1,26 @@
-package com.mk.mnx.vld.utils;
+package com.mk.mnx.vld.messages;
 
 import java.util.Locale;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-public class StaticMessageUtils {
+public class I18nMessageReader  implements MessageReader{
 	
-	private static MessageSource messageSource;
+	private MessageSource messageSource;
 	
-	public StaticMessageUtils(MessageSource messageSource) {
+	public I18nMessageReader(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
 	
-	public static String getMessage(String key , Object ... args) {
+	@Override
+	public String getMessage(String key , Object ... args) {
 		Locale locale = LocaleContextHolder.getLocale();
 		return getMessage(key , locale, args);
 	}
 	
-	public static String getMessage(String key , Locale locale ,Object ... args) {
+	@Override
+	public String getMessage(String key , Locale locale ,Object ... args) {
 		return messageSource.getMessage(key, args, locale);
 	}
 	

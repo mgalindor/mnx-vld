@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 import com.mk.mnx.vld.exception.MonoxValidationConstraintException;
 import com.mk.mnx.vld.model.Constraint;
-import com.mk.mnx.vld.utils.MonoxValidatorUtils;
 import com.mk.mnx.vld.validator.MonoxValidator;
+import com.mk.mnx.vld.validator.MonoxValidatorUtils;
 
 @Aspect
 @Component

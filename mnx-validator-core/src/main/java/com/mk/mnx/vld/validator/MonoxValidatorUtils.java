@@ -1,4 +1,4 @@
-package com.mk.mnx.vld.utils;
+package com.mk.mnx.vld.validator;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Component;
-
 import com.mk.mnx.vld.annotation.ExternalRule;
 import com.mk.mnx.vld.annotation.ParamName;
 import com.mk.mnx.vld.annotation.Rule;
@@ -21,9 +19,8 @@ import com.mk.mnx.vld.exception.MonoxValidationException;
 import com.mk.mnx.vld.model.Constraint;
 import com.mk.mnx.vld.model.ValidationConstraintError;
 
-@Component
 public class MonoxValidatorUtils {
-
+	
 	/**
 	 * This method looks for all {@link com.mk.mnx.vld.annotation.Rule rules} to be
 	 * applied in the validation of a method. The

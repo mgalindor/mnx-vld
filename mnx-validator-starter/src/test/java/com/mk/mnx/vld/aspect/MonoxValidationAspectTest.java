@@ -175,6 +175,10 @@ public class MonoxValidationAspectTest {
 		Fly fly = new Fly();
 		fly.setPilot(new Pilot());
 		fly.getPilot().setDetail(new Detail());
+		
+		fly.setName("Mike");
+		fly.getPilot().setRanking("Expert");
+		fly.getPilot().getDetail().setAge(23d);
 		simpleComponent.basicRuleOverModel(fly);
 	}
 
@@ -188,9 +192,9 @@ public class MonoxValidationAspectTest {
 			MonoxValidationConstraintException mvce = (MonoxValidationConstraintException) e.getUndeclaredThrowable();
 			Assert.assertNotNull(mvce.getErrors());
 			Assert.assertFalse(mvce.getErrors().isEmpty());
-			Assert.assertTrue(mvce.getErrors().size() == 1);
+			Assert.assertEquals(new Integer(3), new Integer (mvce.getErrors().size()));
 			Assert.assertTrue(mvce.getErrors().get(0).getType().getType().equals(DefaultErrorType.REQUIRED.getType()));
-			Assert.assertEquals("name", mvce.getErrors().get(0).getParameter());
+			Assert.assertEquals("fly", mvce.getErrors().get(0).getParameter());
 		}
 	}
 
