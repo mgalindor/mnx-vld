@@ -51,7 +51,7 @@ public class ClassPathFileMessageReader implements MessageReader {
 	 * 
 	 * @param key
 	 *            Is the key that will be looked into the properties file
-	 * @param Locale
+	 * @param locale
 	 *            This parameter is not used
 	 * @param args
 	 *            This parameters are a list of objects to be replaced in the

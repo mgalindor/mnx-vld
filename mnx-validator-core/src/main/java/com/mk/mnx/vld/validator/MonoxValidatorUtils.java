@@ -113,13 +113,13 @@ public class MonoxValidatorUtils {
 	/**
 	 * This method try to assign the list erros in one element of the array args if
 	 * there is an element over the args parameter of type
-	 * List<ValidationConstraintError> the list errors will be assigned on it
+	 * List of ValidationConstraintError the list errors will be assigned on it
 	 * 
 	 * @param args
 	 *            Array of objects
 	 * @param errors
 	 *            List of errors to be assigned
-	 * @return True if there was a parameter of type List<ValidationConstraintError>
+	 * @return True if there was a parameter of type List of ValidationConstraintError
 	 *         and the list of errors was assigned else false
 	 */
 	public boolean assignErrorsIfExistParameter(Object[] args, List<ValidationConstraintError> errors) {
