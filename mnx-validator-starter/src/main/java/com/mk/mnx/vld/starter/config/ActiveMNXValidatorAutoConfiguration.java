@@ -13,9 +13,10 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.core.Ordered;
 
 import com.mk.mnx.vld.constant.MonoxValidatorConstants;
-import com.mk.mnx.vld.utils.MonoxValidatorUtils;
-import com.mk.mnx.vld.utils.StaticMessageUtils;
+import com.mk.mnx.vld.messages.I18nMessageReader;
+import com.mk.mnx.vld.messages.MessageReader;
 import com.mk.mnx.vld.validator.MonoxValidator;
+import com.mk.mnx.vld.validator.MonoxValidatorUtils;
 
 @Configuration
 @ComponentScan(basePackages = {MonoxValidatorConstants.BASE_COMPONENT_SCAN})
@@ -45,12 +46,12 @@ public class ActiveMNXValidatorAutoConfiguration {
         return messageSource;
     }
 	
-	@Bean
-	@ConditionalOnMissingBean(StaticMessageUtils.class)
+	@Bean("messageReader")
+	@ConditionalOnMissingBean(name="messageReader")
 	@ConditionalOnBean(name="monoxValidatorMessageSource")
-	public StaticMessageUtils messageUtils(@Qualifier("monoxValidatorMessageSource") MessageSource messageSource) {
-		StaticMessageUtils staticMessageUtils = new StaticMessageUtils(messageSource);
-		return staticMessageUtils;
+	public MessageReader messageReader(@Qualifier("monoxValidatorMessageSource") MessageSource messageSource) {
+		I18nMessageReader monoxSpringMessageReader = new I18nMessageReader(messageSource);
+		return monoxSpringMessageReader;
 	}
 	
 	@Bean
@@ -61,8 +62,9 @@ public class ActiveMNXValidatorAutoConfiguration {
 	
 	@Bean
 	@ConditionalOnMissingBean(MonoxValidator.class)
-	public MonoxValidator monoxValidator() {
-		return new MonoxValidator();
+	@ConditionalOnBean(name="messageReader")
+	public MonoxValidator monoxValidator(@Qualifier("messageReader")  MessageReader messageReader) {
+		return new MonoxValidator(messageReader);
 	}
 
 }
