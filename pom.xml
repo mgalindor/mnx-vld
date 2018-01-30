@@ -18,12 +18,12 @@
     <spring.boot.version>1.5.6.RELEASE</spring.boot.version>
     <spring.version>5.0.1.RELEASE</spring.version>
     <aspectj.version>1.8.12</aspectj.version>
+    <autoVersionSubmodules>true</autoVersionSubmodules>
   </properties>
 
   <scm>
     <connection>scm:git:https://github.com/mgalindor/mnx-vld.git</connection>
     <url>https://github.com/mgalindor/mnx-vld</url>
-    <tag>HEAD</tag>
   </scm>
 
   <modules>
