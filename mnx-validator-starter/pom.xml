@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.mk.mnx.vld</groupId>
 		<artifactId>mnx-validator</artifactId>
-		<version>1.0.3</version>
+		<version>1.0.4-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.mk.mnx.vld</groupId>
 	<artifactId>mnx-validator-starter</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>mnx-validator-starter</name>
