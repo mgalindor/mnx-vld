@@ -4,7 +4,7 @@
   <groupId>com.mk.mnx.vld</groupId>
   <artifactId>mnx-validator</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.1</version>
+  <version>1.0.2-SNAPSHOT</version>
   <name>mnx-validator</name>
   <url>http://maven.apache.org</url>
 
@@ -23,7 +23,7 @@
   <scm>
     <connection>scm:git:https://github.com/mgalindor/mnx-vld.git</connection>
     <url>https://github.com/mgalindor/mnx-vld</url>
-    <tag>mnx-validator/1.0.1</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <modules>
