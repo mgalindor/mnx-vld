@@ -10,10 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.mk.mnx.vld.ValidationContextConfigurationTest;
-import com.mk.mnx.vld.aspect.model.Detail;
-import com.mk.mnx.vld.aspect.model.Fly;
-import com.mk.mnx.vld.aspect.model.Pilot;
-import com.mk.mnx.vld.aspect.service.ISimpleService;
 import com.mk.mnx.vld.aspect.service.impl.SimpleComponent;
 import com.mk.mnx.vld.exception.MonoxValidationConstraintException;
 import com.mk.mnx.vld.model.DefaultErrorType;
@@ -24,9 +20,6 @@ public class MonoxValidationAspectSimpleParameterTest {
 
 	@Autowired
 	private SimpleComponent simpleComponent;
-	
-	@Autowired
-	private ISimpleService simpleService;
 
 	@Test
 	public void contextValidation() {
@@ -126,8 +119,7 @@ public class MonoxValidationAspectSimpleParameterTest {
 			Assert.assertEquals("otherName", mvce.getErrors().get(0).getParameter());
 		}
 	}
-	
-	
+
 	@Test
 	public void basicExternalRule() {
 		simpleComponent.basicExternalRule("Mike");
@@ -148,16 +140,16 @@ public class MonoxValidationAspectSimpleParameterTest {
 			Assert.assertEquals("name", mvce.getErrors().get(0).getParameter());
 		}
 	}
-	
+
 	@Test
-	public void interfaceBasicRule() {
-		simpleService.interfaceBasicRule("Mike");
+	public void minLengthRule() {
+		simpleComponent.minLengthRule("Mike");
 	}
 
 	@Test
-	public void interfaceBasicRuleException() {
+	public void minLengthRuleException() {
 		try {
-			simpleService.interfaceBasicRule(null);
+			simpleComponent.minLengthRule("M");
 			Assert.fail();
 		} catch (UndeclaredThrowableException e) {
 			Assert.assertTrue(e.getUndeclaredThrowable() instanceof MonoxValidationConstraintException);
@@ -165,9 +157,71 @@ public class MonoxValidationAspectSimpleParameterTest {
 			Assert.assertNotNull(mvce.getErrors());
 			Assert.assertFalse(mvce.getErrors().isEmpty());
 			Assert.assertTrue(mvce.getErrors().size() == 1);
-			Assert.assertTrue(mvce.getErrors().get(0).getType().getType().equals(DefaultErrorType.REQUIRED.getType()));
+			Assert.assertTrue(mvce.getErrors().get(0).getType().getType().equals(DefaultErrorType.WRONG_MIN_LENGTH.getType()));
 			Assert.assertEquals("name", mvce.getErrors().get(0).getParameter());
 		}
 	}
 	
+	@Test
+	public void maxLengthRule() {
+		simpleComponent.maxLengthRule("Mike");
+	}
+
+	@Test
+	public void maxLengthRuleException() {
+		try {
+			simpleComponent.maxLengthRule("MikeLGalen");
+			Assert.fail();
+		} catch (UndeclaredThrowableException e) {
+			Assert.assertTrue(e.getUndeclaredThrowable() instanceof MonoxValidationConstraintException);
+			MonoxValidationConstraintException mvce = (MonoxValidationConstraintException) e.getUndeclaredThrowable();
+			Assert.assertNotNull(mvce.getErrors());
+			Assert.assertFalse(mvce.getErrors().isEmpty());
+			Assert.assertTrue(mvce.getErrors().size() == 1);
+			Assert.assertEquals(DefaultErrorType.WRONG_MAX_LENGTH.getType(),mvce.getErrors().get(0).getType().getType());
+			Assert.assertEquals("name", mvce.getErrors().get(0).getParameter());
+		}
+	}
+	
+	@Test
+	public void minValRule() {
+		simpleComponent.minValRule(5d);
+	}
+
+	@Test
+	public void minValRuleException() {
+		try {
+			simpleComponent.minValRule(2d);
+			Assert.fail();
+		} catch (UndeclaredThrowableException e) {
+			Assert.assertTrue(e.getUndeclaredThrowable() instanceof MonoxValidationConstraintException);
+			MonoxValidationConstraintException mvce = (MonoxValidationConstraintException) e.getUndeclaredThrowable();
+			Assert.assertNotNull(mvce.getErrors());
+			Assert.assertFalse(mvce.getErrors().isEmpty());
+			Assert.assertTrue(mvce.getErrors().size() == 1);
+			Assert.assertTrue(mvce.getErrors().get(0).getType().getType().equals(DefaultErrorType.WRONG_MIN_VALUE.getType()));
+			Assert.assertEquals("age", mvce.getErrors().get(0).getParameter());
+		}
+	}
+	
+	@Test
+	public void maxValRule() {
+		simpleComponent.maxValRule(5);
+	}
+
+	@Test
+	public void maxValRuleException() {
+		try {
+			simpleComponent.maxValRule(11);
+			Assert.fail();
+		} catch (UndeclaredThrowableException e) {
+			Assert.assertTrue(e.getUndeclaredThrowable() instanceof MonoxValidationConstraintException);
+			MonoxValidationConstraintException mvce = (MonoxValidationConstraintException) e.getUndeclaredThrowable();
+			Assert.assertNotNull(mvce.getErrors());
+			Assert.assertFalse(mvce.getErrors().isEmpty());
+			Assert.assertTrue(mvce.getErrors().size() == 1);
+			Assert.assertTrue(mvce.getErrors().get(0).getType().getType().equals(DefaultErrorType.WRONG_MAX_VALUE.getType()));
+			Assert.assertEquals("age", mvce.getErrors().get(0).getParameter());
+		}
+	}
 }

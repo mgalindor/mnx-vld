@@ -61,7 +61,29 @@ public class SimpleComponent{
     		@Rule(parameter="fly",path="pilot.detail.age" ,required=true )
     }) 
     public void basicRuleOverModel( Fly fly) {
-    	
     }
 
+    @Validate
+    @Rules(@Rule(parameter="name",minlength=2 )  ) 
+    public String minLengthRule( String name) {
+        return "Hello "+name;
+    }
+    
+    @Validate
+    @Rules(@Rule(parameter="name",maxlength=5 )  ) 
+    public String maxLengthRule( String name) {
+        return "Hello "+name;
+    }
+    
+    @Validate
+    @Rules(@Rule(parameter="age",minvalue=2.5 )  ) 
+    public String minValRule( Double age) {
+        return "Hello "+age;
+    }
+    
+    @Validate
+    @Rules(@Rule(parameter="age",maxvalue=10 )  ) 
+    public String maxValRule( Integer age) {
+        return "Hello "+age;
+    }
 }

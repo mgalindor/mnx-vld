@@ -76,15 +76,15 @@ public class MonoxValidator {
 						constraint.getPath(), constraint.getMinlength()));
 			}
 			if (constraint.getMaxlength() != -1 && field.length() > constraint.getMaxlength()) {
-				errors.add(buildValidationConstraintError(DefaultErrorType.WRONG_MIN_LENGTH, constraint.getParameter(),
+				errors.add(buildValidationConstraintError(DefaultErrorType.WRONG_MAX_LENGTH, constraint.getParameter(),
 						constraint.getPath(), constraint.getMaxlength()));
 			}
-			if (constraint.getMinvalue() != -1 && StringUtils.isNumeric(field)
+			if (constraint.getMinvalue() != Double.MIN_VALUE &&   isNumeric(field)
 					&& new BigDecimal(field).compareTo(new BigDecimal(constraint.getMinvalue())) == -1) {
 				errors.add(buildValidationConstraintError(DefaultErrorType.WRONG_MIN_VALUE, constraint.getParameter(),
 						constraint.getPath(), constraint.getMinvalue()));
 			}
-			if (constraint.getMaxvalue() != -1 && StringUtils.isNumeric(field)
+			if (constraint.getMaxvalue() != Double.MAX_VALUE && isNumeric(field)
 					&& new BigDecimal(field).compareTo(new BigDecimal(constraint.getMaxvalue())) == 1) {
 				errors.add(buildValidationConstraintError(DefaultErrorType.WRONG_MAX_VALUE, constraint.getParameter(),
 						constraint.getPath(), constraint.getMaxvalue()));
@@ -108,5 +108,10 @@ public class MonoxValidator {
 				ArrayUtils.add(args, StringUtils.capitalize(paramName)));
 
 		return new ValidationConstraintError(message, type, parameter, path, args);
+	}
+	
+	public boolean isNumeric(String str)
+	{
+	  return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
 	}
 }
