@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.reflect.MethodUtils;
+
 import com.mk.mnx.vld.annotation.ExternalRule;
 import com.mk.mnx.vld.annotation.ParamName;
 import com.mk.mnx.vld.annotation.Rule;
@@ -42,7 +44,7 @@ public class MonoxValidatorUtils {
 	public List<Constraint> getRulesInMethod(Method method)
 			throws NoSuchMethodException, SecurityException, MonoxValidationException {
 		List<Constraint> lRule = new ArrayList<Constraint>();
-		Rules rules = method.getAnnotation(Rules.class);
+		Rules rules =  MethodUtils.getAnnotation(method, Rules.class, true, true);
 		if (rules != null && rules.value().length != 0) {
 			lRule.addAll(
 					Arrays.asList(rules.value()).stream().map(x -> new Constraint(x)).collect(Collectors.toList()));
