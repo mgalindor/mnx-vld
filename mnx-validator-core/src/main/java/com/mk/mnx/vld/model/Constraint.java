@@ -1,5 +1,9 @@
 package com.mk.mnx.vld.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import com.mk.mnx.vld.annotation.Rule;
 
 public class Constraint {
@@ -107,4 +111,18 @@ public class Constraint {
 		this.mask = mask;
 	}
 
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return EqualsBuilder.reflectionEquals(this, obj, true);
+	}
+	
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this, true);
+	}
 }

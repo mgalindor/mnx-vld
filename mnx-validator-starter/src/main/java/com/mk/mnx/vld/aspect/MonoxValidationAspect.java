@@ -1,8 +1,9 @@
 package com.mk.mnx.vld.aspect;
 
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -31,7 +32,7 @@ public class MonoxValidationAspect {
 		MethodSignature methodSignature = (MethodSignature) joinPoint.getStaticPart().getSignature();
 		Method method = methodSignature.getMethod();
 
-		List<Constraint> constraints = monoxValidatorUtils.getRulesInMethod(method);
+		Set<Constraint> constraints = new HashSet<Constraint>(monoxValidatorUtils.getRulesInMethod(method));
 		Map<String, Object> params = monoxValidatorUtils.getParameterNameValueMap(method, joinPoint.getArgs());
 
 		try {
